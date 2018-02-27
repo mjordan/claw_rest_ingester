@@ -1,0 +1,9 @@
+{
+    "license": "Unlicense",
+    "type": "project",
+    "description": "Command-line tool for ingesting content into Islandora CLSW via its REST interface.",
+    "require": {
+        "guzzlehttp/guzzle": "~6.0",
+        "league/csv":"~7.1"
+    }
+}
