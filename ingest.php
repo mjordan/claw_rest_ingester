@@ -12,7 +12,7 @@ $csv_file = $input_dir . '/metadata.csv';
 $csv = Reader::createFromPath($csv_file);
 $records = $csv->fetchAssoc();
 
-$client = new GuzzleClient($client_defaults);
+$client = new GuzzleClient();
 
 foreach ($records as $record) {
     $node = array(
@@ -32,9 +32,9 @@ foreach ($records as $record) {
         $file_path = $input_dir . '/' . $record['File'];
         if (file_exists($file_path)) {
             $pathinfo = pathinfo($path);
-            $headers = aray('Content-Type' => 'image/jpeg', 'Content-Disposition' => 'attachment; filename=' . $pathinfo['basename']);
+            $headers = array('Content-Type' => 'image/jpeg', 'Content-Disposition' => 'attachment; filename=' . $pathinfo['basename']);
             $image_file_contents = file_get_contents($file_path);
-            $endpoint = $node_uri . '/media/field_web_content/add/web_content'
+            $endpoint = $node_uri . '/media/field_web_content/add/web_content';
             $file_response = $client->request('POST', $endpoint, ['auth' => $credentials, 'headers' => $headers, 'body' => $image_file_contents]);
         }
         else {
