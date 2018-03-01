@@ -4,6 +4,7 @@
     "description": "Command-line tool for ingesting content into Islandora CLSW via its REST interface.",
     "require": {
         "guzzlehttp/guzzle": "~6.0",
+        "nategood/httpful": "*",
         "league/csv":"~7.1"
     }
 }
