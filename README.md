@@ -14,7 +14,8 @@ You may need to adjust the following variables at the top of `ingest.php`:
 
 ```
 $host = 'http://localhost:8000';
-$credentials = array('admin', 'islandora');
+$username = 'admin';
+$password = 'islandora';
 $input_dir = 'input_data';
 $csv_file = $input_dir . '/metadata.csv';
 ```
@@ -26,17 +27,19 @@ To execute the script using the sample data, run this:
 You should see the following output (with different node URIs):
 
 ```
-Node "Small boats in Havana Harbour" (http://localhost:8000/node/46) created.
- Binary resource (image/jpeg) input_data/IMG_1410.JPG added to http://localhost:8000/node/46.
-Node "Manhatten Island" (http://localhost:8000/node/47) created.
- Binary resource (image/jpeg) input_data/IMG_2549.JPG added to http://localhost:8000/node/47.
-Node "Looking across Burrard Inlet" (http://localhost:8000/node/48) created.
- Binary resource (image/jpeg) input_data/IMG_2940.JPG added to http://localhost:8000/node/48.
-Node "Amsterdam waterfront" (http://localhost:8000/node/49) created.
- Binary resource (image/jpeg) input_data/IMG_2958.JPG added to http://localhost:8000/node/49.
-Node "Alcatraz Island" (http://localhost:8000/node/50) created.
- Binary resource (image/jpeg) input_data/IMG_5083.JPG added to http://localhost:8000/node/50.
+Node "Small boats in Havana Harbour" (http://localhost:8000/node/51) created.
+ Binary resource (image/jpeg) from file input_data/IMG_1410.JPG added to http://localhost:8000/node/51.
+Node "Manhatten Island" (http://localhost:8000/node/52) created.
+ Binary resource (image/jpeg) from file input_data/IMG_2549.JPG added to http://localhost:8000/node/52.
+Node "Looking across Burrard Inlet" (http://localhost:8000/node/53) created.
+ Binary resource (image/jpeg) from file input_data/IMG_2940.JPG added to http://localhost:8000/node/53.
+Node "Amsterdam waterfront" (http://localhost:8000/node/54) created.
+ Binary resource (image/jpeg) from file input_data/IMG_2958.JPG added to http://localhost:8000/node/54.
+Node "Alcatraz Island" (http://localhost:8000/node/55) created.
+ Binary resource (image/jpeg) from file input_data/IMG_5083.JPG added to http://localhost:8000/node/55.
 ```
+
+Go look at your Drupal content and enjoy.
 
 ## Ingesting your own images
 
