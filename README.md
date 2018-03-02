@@ -1,6 +1,6 @@
 # Islandora CLAW REST Ingester
 
-Proof of concept script to ingest a batch of nodes and accompanying JPEG images using Islandora CLAW's REST interface. REST workflow is based on that described in https://github.com/Islandora-CLAW/islandora/pull/76.
+Proof of concept script to ingest a batch of nodes and accompanying JPEG, TIFF, or JP2 images using Islandora CLAW's REST interface. REST workflow is based on that described in https://github.com/Islandora-CLAW/islandora/pull/76.
 
 ## Installation
 
@@ -43,7 +43,7 @@ Go look at your Drupal content and enjoy.
 
 ## Ingesting your own images
 
-You can load your own nodes and accompanying imamges as long as the nodes have the `islandora_image` content type and the images are JPEGs.
+You can load your own nodes and accompanying imamges as long as the nodes have the `islandora_image` content type and the images are either JPEGs, TIFFs, or JP2s.
 
 The directory that contains the data to be ingested is arranged like this:
 
@@ -57,7 +57,7 @@ your_folder/
 └── metadata.csv
 ```
 
-The names of the images can take any form you want since they are included in the CSV file (which can also be named whatever you want). That file must contain three columns, `File`, `Title`, and `Description`, corresponding to the fields that the default CLAW `islandora_image` content type has. The `File` column contains the full filename of the JPEG, and the other two columns contain the corresponding values for your nodes.
+The names of the images can take any form you want since they are included in the CSV file (which can also be named whatever you want). That file must contain three columns, `File`, `Title`, and `Description`, corresponding to the fields that the default CLAW `islandora_image` content type has. The `File` column contains the full filename of the image file, and the other two columns contain the corresponding values for your nodes.
 
 If you load you own data, be sure that the values of the `$input_dir` and `$csv_file` point to the right paths.
 

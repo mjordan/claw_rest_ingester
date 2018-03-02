@@ -13,7 +13,10 @@ $csv_file = $input_dir . '/metadata.csv';
 require 'vendor/autoload.php';
 use League\Csv\Reader;
 use GuzzleHttp\Client as GuzzleClient;
-$mimes = new \Mimey\MimeTypes;
+
+$mimes_builder = \Mimey\MimeMappingBuilder::create();
+$mimes_builder->add('image/jp2', 'jp2');
+$mimes = new \Mimey\MimeTypes($mimes_builder->getMapping());
 
 $csv = Reader::createFromPath($csv_file);
 $records = $csv->fetchAssoc();
@@ -49,13 +52,31 @@ foreach ($records as $record) {
         if (file_exists($file_path)) {
             $pathinfo = pathinfo($file_path);
             $mimetype = $mimes->getMimeType($pathinfo['extension']);
+            switch ($mimetype) {
+                case "image/jpeg":
+                    $endpoint_path = '/media/field_web_content/add/web_content';
+                    break;
+                case "image/tiff":
+                    $endpoint_path = '/media/field_tiff/add/image_tiff';
+                    break;
+                case "image/jp2":
+                    $endpoint_path = '/media/field_jp2/add/jp2';
+                    break;
+                default:
+                    print "Image type $mimetype not recognized, not ingesting binary resource\n";
+                    continue; 
+            }
             $headers = array('Authorization' => 'Basic ' . $authen_string, 'Content-Type' => $mimetype,
                 'Content-Disposition' => 'attachment; filename="' . $pathinfo['basename'] . '"');
             $image_file_contents = fopen($file_path, 'r');
-            $endpoint = $node_uri[0] . '/media/field_web_content/add/web_content';
+            $endpoint = $node_uri[0] . $endpoint_path;
             $binary_response = $client->request('POST', $endpoint, ['headers' => $headers, 'body' => $image_file_contents]);
             if ($binary_response->getStatusCode() == 201) {
                 print " Binary resource (" . $mimetype . ") from file " . $file_path . " added to " . $node_uri[0] . ".\n";
+            }
+            else {
+                print " Binary resource (" . $mimetype . ") from file " . $file_path . " not added to " . $node_uri[0] .
+                    " (HTTP response code " . $binary_response->getStatusCode() .")\n";
             }
         }
         else {
