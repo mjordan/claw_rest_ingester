@@ -42,19 +42,19 @@ foreach ($records as $record) {
         continue;
     }
 
-    // Add the JPEG file.
+    // Add the binary resource.
     if ($node_response->getStatusCode() == 201) {
         $node_uri = $node_response->getHeader('Location');
         $file_path = $input_dir . '/' . $record['File'];
         if (file_exists($file_path)) {
             $pathinfo = pathinfo($file_path);
-             $mimetype = $mimes->getMimeType($pathinfo['extension']);
+            $mimetype = $mimes->getMimeType($pathinfo['extension']);
             $headers = array('Authorization' => 'Basic ' . $authen_string, 'Content-Type' => $mimetype,
                 'Content-Disposition' => 'attachment; filename="' . $pathinfo['basename'] . '"');
             $image_file_contents = fopen($file_path, 'r');
             $endpoint = $node_uri[0] . '/media/field_web_content/add/web_content';
-            $file_response = $client->request('POST', $endpoint, ['headers' => $headers, 'body' => $image_file_contents]);
-            if ($file_response->getStatusCode() == 201) {
+            $binary_response = $client->request('POST', $endpoint, ['headers' => $headers, 'body' => $image_file_contents]);
+            if ($binary_response->getStatusCode() == 201) {
                 print " Binary resource (" . $mimetype . ") from file " . $file_path . " added to " . $node_uri[0] . ".\n";
             }
         }
