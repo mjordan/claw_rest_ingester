@@ -1,7 +1,7 @@
 {
     "license": "Unlicense",
     "type": "project",
-    "description": "Command-line tool for ingesting content into Islandora CLSW via its REST interface.",
+    "description": "Command-line tool for ingesting content into Islandora CLAW via its REST interface.",
     "require": {
         "guzzlehttp/guzzle": "~6.0",
         "ralouphie/mimey": "*",
