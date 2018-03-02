@@ -23,6 +23,21 @@ To execute the script using the sample data, run this:
 
 `php ingest.php`
 
+You should see the following output (with different node URIs):
+
+```
+Node "Small boats in Havana Harbour" (http://localhost:8000/node/46) created.
+ Binary resource (image/jpeg) input_data/IMG_1410.JPG added to http://localhost:8000/node/46.
+Node "Manhatten Island" (http://localhost:8000/node/47) created.
+ Binary resource (image/jpeg) input_data/IMG_2549.JPG added to http://localhost:8000/node/47.
+Node "Looking across Burrard Inlet" (http://localhost:8000/node/48) created.
+ Binary resource (image/jpeg) input_data/IMG_2940.JPG added to http://localhost:8000/node/48.
+Node "Amsterdam waterfront" (http://localhost:8000/node/49) created.
+ Binary resource (image/jpeg) input_data/IMG_2958.JPG added to http://localhost:8000/node/49.
+Node "Alcatraz Island" (http://localhost:8000/node/50) created.
+ Binary resource (image/jpeg) input_data/IMG_5083.JPG added to http://localhost:8000/node/50.
+```
+
 ## Ingesting your own images
 
 You can load your own nodes and accompanying imamges as long as the nodes have the `islandora_image` content type and the images are JPEGs.
