@@ -19,17 +19,17 @@ $csv = Reader::createFromPath($csv_file);
 $records = $csv->fetchAssoc();
 
 $client = new GuzzleClient(array('http_errors' => false));
+$authen_string = base64_encode($username . ':' . $password);
 
 foreach ($records as $record) {
+    // Create the node.
     $node = array(
         'type' => array(array('target_id' => 'islandora_image', 'target_type' => 'node_type')),
         'title' => array(array('value' => $record['Title'])),
         'field_description' => array(array('value' => $record['Description'])),
     );
     $json = json_encode($node);
-    $authen_string = base64_encode($username . ':' . $password);
 
-    // Create the node.
     $endpoint = $host . '/node';
     $node_response = $client->request('POST', $endpoint,
         ['headers' => array('Authorization' => 'Basic ' . $authen_string, 'Content-Type' => 'application/json'), 'body' => $json]);
@@ -49,8 +49,8 @@ foreach ($records as $record) {
         if (file_exists($file_path)) {
             $pathinfo = pathinfo($file_path);
              $mimetype = $mimes->getMimeType($pathinfo['extension']);
-            $headers = array('Authorization' => 'Basic ' . $authen_string, 'Content-Type' => $mimetype, 'Content-Disposition' => 'attachment; filename="' . $pathinfo['basename'] . '"');
-            // $image_file_contents = file_get_contents($file_path);
+            $headers = array('Authorization' => 'Basic ' . $authen_string, 'Content-Type' => $mimetype,
+                'Content-Disposition' => 'attachment; filename="' . $pathinfo['basename'] . '"');
             $image_file_contents = fopen($file_path, 'r');
             $endpoint = $node_uri[0] . '/media/field_web_content/add/web_content';
             $file_response = $client->request('POST', $endpoint, ['headers' => $headers, 'body' => $image_file_contents]);
