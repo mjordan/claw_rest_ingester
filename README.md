@@ -1,6 +1,6 @@
 # Islandora CLAW REST Ingester
 
-Proof of concept script to ingest a batch of nodes and accompanying JPEG, TIFF, or JP2 images using Islandora CLAW's REST interface. REST workflow is based on that described in https://github.com/Islandora-CLAW/islandora/pull/76.
+Proof of concept script to ingest a batch of nodes and accompanying JPEG, TIFF, or JP2 images using Islandora CLAW's REST interface.
 
 ## Installation
 
