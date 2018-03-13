@@ -33,9 +33,8 @@ foreach ($records as $record) {
     );
     $json = json_encode($node);
 
-    $endpoint = $host . '/node';
-    $node_response = $client->request('POST', $endpoint,
-        ['headers' => array('Authorization' => 'Basic ' . $authen_string, 'Content-Type' => 'application/json'), 'body' => $json]);
+    $endpoint = $host . '/node?_format=json';
+    $node_response = $client->request('POST', $endpoint, ['auth' => [$username, $password], 'headers' => array('Content-Type' => 'application/json'), 'body' => $json]);
     if ($node_response->getStatusCode() == 201) {
         $node_uri = $node_response->getHeader('Location');
         print 'Node "' . $record['Title'] . '" (' . $node_uri[0] . ") created.\n";
@@ -66,11 +65,10 @@ foreach ($records as $record) {
                     print "Image type $mimetype not recognized, not ingesting binary resource\n";
                     continue; 
             }
-            $headers = array('Authorization' => 'Basic ' . $authen_string, 'Content-Type' => $mimetype,
-                'Content-Disposition' => 'attachment; filename="' . $pathinfo['basename'] . '"');
+            $headers = array('Content-Type' => $mimetype, 'Content-Disposition' => 'attachment; filename="' . $pathinfo['basename'] . '"');
             $image_file_contents = fopen($file_path, 'r');
             $endpoint = $node_uri[0] . $endpoint_path;
-            $binary_response = $client->request('POST', $endpoint, ['headers' => $headers, 'body' => $image_file_contents]);
+            $binary_response = $client->request('POST', $endpoint, ['auth' => [$username, $password], 'headers' => $headers, 'body' => $image_file_contents]);
             if ($binary_response->getStatusCode() == 201) {
                 print " Binary resource (" . $mimetype . ") from file " . $file_path . " added to " . $node_uri[0] . ".\n";
             }

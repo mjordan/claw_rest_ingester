@@ -1,6 +1,6 @@
 # Islandora CLAW REST Ingester
 
-Proof of concept script to ingest a batch of nodes and accompanying JPEG, TIFF, or JP2 images using Islandora CLAW's REST interface.
+Script to ingest a batch of nodes and accompanying JPEG, TIFF, or JP2 images using Islandora CLAW's REST interface.
 
 ## Installation
 
@@ -27,16 +27,16 @@ To execute the script using the sample data, run this:
 You should see the following output (with different node URIs):
 
 ```
-Node "Small boats in Havana Harbour" (http://localhost:8000/node/51) created.
- Binary resource (image/jpeg) from file input_data/IMG_1410.JPG added to http://localhost:8000/node/51.
-Node "Manhatten Island" (http://localhost:8000/node/52) created.
- Binary resource (image/jpeg) from file input_data/IMG_2549.JPG added to http://localhost:8000/node/52.
-Node "Looking across Burrard Inlet" (http://localhost:8000/node/53) created.
- Binary resource (image/jpeg) from file input_data/IMG_2940.JPG added to http://localhost:8000/node/53.
-Node "Amsterdam waterfront" (http://localhost:8000/node/54) created.
- Binary resource (image/jpeg) from file input_data/IMG_2958.JPG added to http://localhost:8000/node/54.
-Node "Alcatraz Island" (http://localhost:8000/node/55) created.
- Binary resource (image/jpeg) from file input_data/IMG_5083.JPG added to http://localhost:8000/node/55.
+Node "Small boats in Havana Harbour" (http://localhost:8000/node/8) created.
+ Binary resource (image/tiff) from file input_data/IMG_1410.tif added to http://localhost:8000/node/8.
+Node "Manhatten Island" (http://localhost:8000/node/9) created.
+ Binary resource (image/jp2) from file input_data/IMG_2549.jp2 added to http://localhost:8000/node/9.
+Node "Looking across Burrard Inlet" (http://localhost:8000/node/10) created.
+ Binary resource (image/jpeg) from file input_data/IMG_2940.JPG added to http://localhost:8000/node/10.
+Node "Amsterdam waterfront" (http://localhost:8000/node/11) created.
+ Binary resource (image/jpeg) from file input_data/IMG_2958.JPG added to http://localhost:8000/node/11.
+Node "Alcatraz Island" (http://localhost:8000/node/12) created.
+ Binary resource (image/jpeg) from file input_data/IMG_5083.JPG added to http://localhost:8000/node/12.
 ```
 
 Go look at your Drupal content and enjoy.
@@ -49,11 +49,11 @@ The directory that contains the data to be ingested is arranged like this:
 
 ```
 your_folder/
-├── IMG_1410.JPG
-├── IMG_2549.JPG
-├── IMG_2940.JPG
+├── image1.JPG
+├── pic_saturday.jpg
+├── image-27262.jp2
 ├── IMG_2958.JPG
-├── IMG_5083.JPG
+├── someimage.tif
 └── metadata.csv
 ```
 
