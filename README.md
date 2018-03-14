@@ -4,7 +4,7 @@ Script to ingest a batch of nodes and accompanying JPEG, TIFF, or JP2 images usi
 
 ## Installation
 
-1. `git https://github.com/mjordan/claw_rest_ingester.git`
+1. `git https://github.com/mjordan/claw_rest_ingester.git` (depends on changes made in https://github.com/Islandora-CLAW/islandora_image/pull/20 (commit d38331ae6c3786e79e018464d9a00f66a9a82638))
 1. `cd claw_rest_ingester`
 1. `php composer.phar install` (or equivalent on your system, e.g., `./composer install`)
 
