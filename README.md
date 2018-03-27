@@ -57,9 +57,24 @@ your_folder/
 └── metadata.csv
 ```
 
-The names of the images can take any form you want since they are included in the CSV file (which can also be named whatever you want). That file must contain three columns, `File`, `Title`, and `Description`, corresponding to the fields that the default CLAW `islandora_image` content type has. The `File` column contains the full filename of the image file, and the other two columns contain the corresponding values for your nodes.
+The names of the images can take any form you want since they are included in the CSV file (which can also be named whatever you want). That file must contain three columns, `file`, `title`, and `field_description`, corresponding to the fields that the default CLAW `islandora_image` content type has. The `file` column contains the full filename of the image file, and the other two columns contain the corresponding values for your nodes.
 
 If you load you own data, be sure that the values of the `$input_dir` and `$csv_file` point to the right paths.
+
+## Adding custom fields
+
+By default, the Islandora Image content type has two fields, `title` and `field_description`. You can add your own fields to the input CSV as long as the column headers match the machine name of fields that have been added to the Islandora Image content type. For example, if you add a custom field withe machine name `field_genre`, you can ingest nodes using the following CSV file:
+
+```
+file,title,field_description,field_genre
+"IMG_1410.tif","Small boats in Havana Harbour","Taken on vacation in Cuba.","Photograph"
+"IMG_2549.jp2","Manhatten Island","Taken from the ferry from downtown New York to Highlands, NJ. Weather was windy.","Photograph"
+"IMG_2940.JPG","Looking across Burrard Inlet","View from Deep Cove to Burnaby Mountain. Simon Fraser University is visible on the top of the mountain in the distance.","Photograph"
+"IMG_2958.JPG","Amsterdam waterfront","Amsterdam waterfront on an overcast day.","Photograph"
+"IMG_5083.JPG","Alcatraz Island","Taken from Fisherman's Wharf, San Francisco.","Photograph"
+```
+
+It important that you add your custom fields to the Islandora Image content type before attempting to ingest the nodes. If the column heading don't match the machine name of an existing field, Drupal with respond with a `500` HTTP error and will not ingest the node.
 
 ## Maintainer
 
