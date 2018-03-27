@@ -20,15 +20,18 @@ $mimes = new \Mimey\MimeTypes($mimes_builder->getMapping());
 
 $csv = Reader::createFromPath($csv_file);
 $records = $csv->fetchAssoc();
-if (count($records)) {
-    $headers = array_keys($records[1]);
-}
-else {
+if (count($records) == 0) {
     print "There are no records in the CSV filea at $csv_file.\n";
 }
 
 $client = new GuzzleClient(array('http_errors' => false));
 $authen_string = base64_encode($username . ':' . $password);
+
+$mimetypes = array(
+    'image/jpeg' => array('endpoint' => '/media/field_web_content/add/web_content', 'id' => 'web_content'),
+    'image/tiff' => array('endpoint' => '/media/field_tiff/add/image_tiff', 'id' => 'image_tiff'),
+    'image/jp2' => array('endpoint' => '/media/field_jp2/add/jp2', 'id' => 'jp2'),
+);
 
 foreach ($records as $record) {
     // Create the node.
@@ -40,7 +43,7 @@ foreach ($records as $record) {
     // Add any custom fields.
     foreach ($record as $custom_field_header => $custom_field_value) {
       $not_custom = array('file', 'title', 'field_descripton');
-      if (!in_array($custom_field_header, $not_custom)) {
+      if (!in_array($custom_field_header, $not_custom) && !preg_match('/^media:/', $custom_field_header)) {
           $node[$custom_field_header] = array(array('value' => $record[$custom_field_header]));
       }
     }
@@ -66,13 +69,13 @@ foreach ($records as $record) {
             $mimetype = $mimes->getMimeType($pathinfo['extension']);
             switch ($mimetype) {
                 case "image/jpeg":
-                    $endpoint_path = '/media/field_web_content/add/web_content';
+                    $endpoint_path = $mimetypes['image/jpeg']['endpoint'];
                     break;
                 case "image/tiff":
-                    $endpoint_path = '/media/field_tiff/add/image_tiff';
+                    $endpoint_path = $mimetypes['image/tiff']['endpoint'];
                     break;
                 case "image/jp2":
-                    $endpoint_path = '/media/field_jp2/add/jp2';
+                    $endpoint_path = $mimetypes['image/jp2']['endpoint'];
                     break;
                 default:
                     print "Image type $mimetype not recognized, not ingesting binary resource\n";
@@ -83,7 +86,9 @@ foreach ($records as $record) {
             $endpoint = $node_uri[0] . $endpoint_path;
             $binary_response = $client->request('POST', $endpoint, ['auth' => [$username, $password], 'headers' => $headers, 'body' => $image_file_contents]);
             if ($binary_response->getStatusCode() == 201) {
-                print " Binary resource (" . $mimetype . ") from file " . $file_path . " added to " . $node_uri[0] . ".\n";
+                $binary_uri = $binary_response->getHeader('Location');
+                print " Binary resource " . $binary_uri[0] . " from file " . $file_path . " added to " . $node_uri[0] . ".\n";
+                add_custom_fields_to_binary_resource($client, $record, $mimetype, $binary_uri[0]);
             }
             else {
                 print " Binary resource (" . $mimetype . ") from file " . $file_path . " not added to " . $node_uri[0] .
@@ -95,4 +100,34 @@ foreach ($records as $record) {
             continue;
         }
     }
+}
+
+function add_custom_fields_to_binary_resource($client, $record, $mimetype, $binary_uri) {
+    global $mimetypes;
+    global $username;
+    global $password;
+
+    $binary = array(
+        'bundle' => array(array('target_id' => $mimetypes[$mimetype]['id'], 'target_type' => 'media_bundle')),
+    );
+    foreach ($record as $column_header => $value) {
+        $media_fields_present = false;
+        if (preg_match('/^media:/', $column_header)) {
+            $media_fields_present = true;
+            $field_name = preg_replace('/^media:/', '', $column_header);
+            $binary[$field_name] = array(array('value' => $value));
+        }
+
+        if ($media_fields_present) {
+            $json = json_encode($binary);
+            var_dump($json);
+            $headers = array('Content-Type' => 'application/json');
+            $response = $client->request('PATCH', $binary_uri . '?_format=json', ['auth' => [$username, $password], 'headers' => $headers, 'body' => $json]);
+
+            print "PATCH status code is " . $response->getStatusCode() . "\n";
+
+        }
+    }
+
+
 }
