@@ -33,10 +33,13 @@ $authen_string = base64_encode($username . ':' . $password);
 foreach ($records as $record) {
     // Create the node.
     $node = array(
-        'type' => array(array('target_id' => 'islandora_image', 'target_type' => 'node_type')),
+        'type' => array(array('target_id' => 'islandora_object', 'target_type' => 'node_type')),
         'title' => array(array('value' => $record['title'])),
         'field_description' => array(array('value' => $record['field_description'])),
+        // Term ID from the Islandora Models taxonomy.
+        'field_model' => array(array('target_id' => '23', 'target_type' => 'taxonomy_term')),
     );
+/*
     // Add any custom fields.
     foreach ($record as $custom_field_header => $custom_field_value) {
       $not_custom = array('file', 'title', 'field_descripton');
@@ -44,6 +47,7 @@ foreach ($records as $record) {
           $node[$custom_field_header] = array(array('value' => $record[$custom_field_header]));
       }
     }
+*/
     $json = json_encode($node);
 
     $endpoint = $host . '/node?_format=json';
@@ -65,23 +69,32 @@ foreach ($records as $record) {
             $pathinfo = pathinfo($file_path);
             $mimetype = $mimes->getMimeType($pathinfo['extension']);
             switch ($mimetype) {
+                // TIFFs and JP2s are file.
                 case "image/jpeg":
-                    $endpoint_path = '/media/field_web_content/add/web_content';
+                case "image/png":
+                case "image/gif":
+                    $media_type = 'image';
                     break;
-                case "image/tiff":
-                    $endpoint_path = '/media/field_tiff/add/image_tiff';
-                    break;
+                case "audio/mpeg3":
+                case "audio/wav":
+                case "audio/aac":
                 case "image/jp2":
-                    $endpoint_path = '/media/field_jp2/add/jp2';
+                    $media_type = 'audio';
+                    break;
+                case "video/mp4":
+                    $media_type = 'video';
                     break;
                 default:
-                    print "Image type $mimetype not recognized, not ingesting binary resource\n";
+                    $media_type = 'file';
                     continue; 
             }
-            $headers = array('Content-Type' => $mimetype, 'Content-Disposition' => 'attachment; filename="' . $pathinfo['basename'] . '"');
+            // 15 is the tid from Media Use taxo.
+            $endpoint_path = '/media/' . $media_type . '/15';
+
+            $headers = array('Content-Type' => $mimetype, 'Content-Location' => 'fedora://' . $pathinfo['basename']);
             $image_file_contents = fopen($file_path, 'r');
             $endpoint = $node_uri[0] . $endpoint_path;
-            $binary_response = $client->request('POST', $endpoint, ['auth' => [$username, $password], 'headers' => $headers, 'body' => $image_file_contents]);
+            $binary_response = $client->request('PUT', $endpoint, ['auth' => [$username, $password], 'headers' => $headers, 'body' => $image_file_contents]);
             if ($binary_response->getStatusCode() == 201) {
                 print " Binary resource (" . $mimetype . ") from file " . $file_path . " added to " . $node_uri[0] . ".\n";
             }
