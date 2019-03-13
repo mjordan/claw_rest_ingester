@@ -70,9 +70,9 @@ The names of the images can take any form you want since they are included in th
 
 If you load you own data, be sure that the values of the `$input_dir` and `$csv_file` point to the right paths.
 
-## Adding custom fields
+## Adding additional or custom fields
 
-By default, the Islandora Image content type has two fields, `title` and `field_description`. You can add your own fields to the input CSV as long as the column headers match the machine name of fields that have been added to the Islandora Image content type. For example, if you add a custom field withe machine name `field_genre`, you can ingest nodes using the following CSV file:
+The sample CSV file comes with data in the `title` and `field_description` fields, but you can add additional fields to populate your Repository Item objects. In order to do this, add fields to the input CSV using column headers that match the machine name of fields that exist in the Repository Item content type. For example, if you add a field with the machine name `field_rights` to your CSV, you can ingest nodes using the following CSV file:
 
 ```
 file,title,field_description,field_rights
@@ -83,7 +83,7 @@ file,title,field_description,field_rights
 "IMG_5083.JPG","Alcatraz Island","Taken from Fisherman's Wharf, San Francisco.","CC0"
 ```
 
-It important that you add your custom fields to the Islandora Repository Item content type before attempting to ingest the nodes. If the column heading don't match the machine name of an existing field, Drupal with respond with a `500` HTTP error and will not ingest the node.
+You can add your own custom fields as well, as long as the column headers match the machine name of the node fields. It important that the fields already exist on the Islandora Repository Item content type before attempting to ingest the nodes. If the column heading don't match the machine name of an existing field, Drupal with respond with a `500` HTTP error and will not ingest the node.
 
 ## Maintainer
 
