@@ -85,6 +85,9 @@ file,title,field_description,field_rights
 
 You can add your own custom fields as well, as long as the column headers match the machine name of the node fields. It important that the fields already exist on the Islandora Repository Item content type before attempting to ingest the nodes. If the column heading don't match the machine name of an existing field, Drupal with respond with a `500` HTTP error and will not ingest the node.
 
+Currently, only fields that of type "Text" can be added. Support for Entity Reference and other field types is under development.
+
+
 ## Maintainer
 
 * [Mark Jordan](https://github.com/mjordan)
