@@ -7,6 +7,13 @@ $username = 'admin';
 $password = 'islandora';
 $input_dir = 'input_data';
 $csv_file = $input_dir . '/metadata.csv';
+// The term ID from Media Use taxonomy that you want to assign to media.
+$media_use_tid = 15;
+// The Drupal filesystem where you want the files to be saved.
+// $drupal_filesystem = 'public://';
+$drupal_filesystem = 'fedora://';
+// Term ID from the Islandora Models taxonomy.
+$model = '23';
 
 // You do not need to adjust anything below this line.
 
@@ -37,9 +44,9 @@ foreach ($records as $record) {
         'title' => array(array('value' => $record['title'])),
         'field_description' => array(array('value' => $record['field_description'])),
         // Term ID from the Islandora Models taxonomy.
-        'field_model' => array(array('target_id' => '23', 'target_type' => 'taxonomy_term')),
+        'field_model' => array(array('target_id' => $model, 'target_type' => 'taxonomy_term')),
     );
-/*
+
     // Add any custom fields.
     foreach ($record as $custom_field_header => $custom_field_value) {
       $not_custom = array('file', 'title', 'field_descripton');
@@ -47,7 +54,7 @@ foreach ($records as $record) {
           $node[$custom_field_header] = array(array('value' => $record[$custom_field_header]));
       }
     }
-*/
+
     $json = json_encode($node);
 
     $endpoint = $host . '/node?_format=json';
@@ -78,7 +85,6 @@ foreach ($records as $record) {
                 case "audio/mpeg3":
                 case "audio/wav":
                 case "audio/aac":
-                case "image/jp2":
                     $media_type = 'audio';
                     break;
                 case "video/mp4":
@@ -86,12 +92,10 @@ foreach ($records as $record) {
                     break;
                 default:
                     $media_type = 'file';
-                    continue; 
             }
-            // 15 is the tid from Media Use taxo.
-            $endpoint_path = '/media/' . $media_type . '/15';
+            $endpoint_path = '/media/' . $media_type . '/' . $media_use_tid;
 
-            $headers = array('Content-Type' => $mimetype, 'Content-Location' => 'fedora://' . $pathinfo['basename']);
+            $headers = array('Content-Type' => $mimetype, 'Content-Location' => $drupal_filesystem . $pathinfo['basename']);
             $image_file_contents = fopen($file_path, 'r');
             $endpoint = $node_uri[0] . $endpoint_path;
             $binary_response = $client->request('PUT', $endpoint, ['auth' => [$username, $password], 'headers' => $headers, 'body' => $image_file_contents]);

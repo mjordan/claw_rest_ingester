@@ -1,12 +1,10 @@
 # Islandora CLAW REST Ingester
 
-Script to ingest a batch of nodes and accompanying JPEG, TIFF, or JP2 images using Islandora CLAW's REST interface.
-
-> Note: This tool has not kept up with recent changes in CLAW, particularly the introduction of Flysystem, so it might not work as intended.
+Script to ingest a batch of nodes and accompanying media (images, audio, video, and binary files) using Islandora CLAW's REST interface.
 
 ## Installation
 
-1. `git https://github.com/mjordan/claw_rest_ingester.git` (depends on changes made in https://github.com/Islandora-CLAW/islandora_image/pull/20 (commit d38331ae6c3786e79e018464d9a00f66a9a82638))
+1. `git https://github.com/mjordan/claw_rest_ingester.git`
 1. `cd claw_rest_ingester`
 1. `php composer.phar install` (or equivalent on your system, e.g., `./composer install`)
 
@@ -20,6 +18,13 @@ $username = 'admin';
 $password = 'islandora';
 $input_dir = 'input_data';
 $csv_file = $input_dir . '/metadata.csv';
+// The term ID from Islandora's Media Use taxonomy that you want to assign to media.
+$media_use_tid = 15;
+// The Drupal filesystem where you want the files to be saved.
+// $drupal_filesystem = 'public://';
+$drupal_filesystem = 'fedora://';
+// Term ID from the Islandora Models taxonomy.
+$model = '23';
 ```
 
 To execute the script using the sample data, run this:
@@ -43,9 +48,9 @@ Node "Alcatraz Island" (http://localhost:8000/node/12) created.
 
 Go look at your Drupal content and enjoy.
 
-## Ingesting your own images
+## Ingesting your own objects
 
-You can load your own nodes and accompanying imamges as long as the nodes have the `islandora_image` content type and the images are either JPEGs, TIFFs, or JP2s.
+You can load your own nodes and accompanying media as long as the nodes have the Repository Item (`islandora_object`) content type.
 
 The directory that contains the data to be ingested is arranged like this:
 
@@ -59,7 +64,7 @@ your_folder/
 └── metadata.csv
 ```
 
-The names of the images can take any form you want since they are included in the CSV file (which can also be named whatever you want). That file must contain three columns, `file`, `title`, and `field_description`, corresponding to the fields that the default CLAW `islandora_image` content type has. The `file` column contains the full filename of the image file, and the other two columns contain the corresponding values for your nodes.
+The names of the images can take any form you want since they are included in the CSV file (which can also be named whatever you want). That file must contain three columns, `file`, `title`, and `field_description`, corresponding to the fields that the default CLAW `islandora_object` content type has. The `file` column contains the full filename of the image file, and the other two columns contain the corresponding values for your nodes.
 
 If you load you own data, be sure that the values of the `$input_dir` and `$csv_file` point to the right paths.
 
@@ -68,15 +73,15 @@ If you load you own data, be sure that the values of the `$input_dir` and `$csv_
 By default, the Islandora Image content type has two fields, `title` and `field_description`. You can add your own fields to the input CSV as long as the column headers match the machine name of fields that have been added to the Islandora Image content type. For example, if you add a custom field withe machine name `field_genre`, you can ingest nodes using the following CSV file:
 
 ```
-file,title,field_description,field_genre
-"IMG_1410.tif","Small boats in Havana Harbour","Taken on vacation in Cuba.","Photograph"
-"IMG_2549.jp2","Manhatten Island","Taken from the ferry from downtown New York to Highlands, NJ. Weather was windy.","Photograph"
-"IMG_2940.JPG","Looking across Burrard Inlet","View from Deep Cove to Burnaby Mountain. Simon Fraser University is visible on the top of the mountain in the distance.","Photograph"
-"IMG_2958.JPG","Amsterdam waterfront","Amsterdam waterfront on an overcast day.","Photograph"
-"IMG_5083.JPG","Alcatraz Island","Taken from Fisherman's Wharf, San Francisco.","Photograph"
+file,title,field_description,field_rights
+"IMG_1410.tif","Small boats in Havana Harbour","Taken on vacation in Cuba.","CC BY 4.0"
+"IMG_2549.jp2","Manhatten Island","Taken from the ferry from downtown New York to Highlands, NJ. Weather was windy.","CC BY 4.0"
+"IMG_2940.JPG","Looking across Burrard Inlet","View from Deep Cove to Burnaby Mountain. Simon Fraser University is visible on the top of the mountain in the distance.","CC0"
+"IMG_2958.JPG","Amsterdam waterfront","Amsterdam waterfront on an overcast day.","CC BY 4.0"
+"IMG_5083.JPG","Alcatraz Island","Taken from Fisherman's Wharf, San Francisco.","CC0"
 ```
 
-It important that you add your custom fields to the Islandora Image content type before attempting to ingest the nodes. If the column heading don't match the machine name of an existing field, Drupal with respond with a `500` HTTP error and will not ingest the node.
+It important that you add your custom fields to the Islandora Repository Item content type before attempting to ingest the nodes. If the column heading don't match the machine name of an existing field, Drupal with respond with a `500` HTTP error and will not ingest the node.
 
 ## Maintainer
 
