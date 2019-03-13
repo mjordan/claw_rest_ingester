@@ -42,14 +42,14 @@ foreach ($records as $record) {
     $node = array(
         'type' => array(array('target_id' => 'islandora_object', 'target_type' => 'node_type')),
         'title' => array(array('value' => $record['title'])),
-        'field_description' => array(array('value' => $record['field_description'])),
+        // 'field_description' => array(array('value' => $record['field_description'])),
         // Term ID from the Islandora Models taxonomy.
         'field_model' => array(array('target_id' => $model, 'target_type' => 'taxonomy_term')),
     );
 
     // Add any custom fields.
     foreach ($record as $custom_field_header => $custom_field_value) {
-      $not_custom = array('file', 'title', 'field_descripton');
+      $not_custom = array('file', 'title');
       if (!in_array($custom_field_header, $not_custom)) {
           $node[$custom_field_header] = array(array('value' => $record[$custom_field_header]));
       }

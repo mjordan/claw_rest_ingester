@@ -66,7 +66,7 @@ your_folder/
 └── metadata.csv
 ```
 
-The names of the images can take any form you want since they are included in the CSV file (which can also be named whatever you want). That file must contain three columns, `file`, `title`, and `field_description`, corresponding to the fields that the default CLAW `islandora_object` content type has. The `file` column contains the full filename of the image file, and the other two columns contain the corresponding values for your nodes.
+The names of the images can take any form you want since they are included in the CSV file (which can also be named whatever you want). That file must contain at least two columns, `file` and `title`. The `file` column contains the full filename of the image file, and the `title` column contains the corresponding title values.
 
 If you load you own data, be sure that the values of the `$input_dir` and `$csv_file` point to the right paths.
 
@@ -85,7 +85,7 @@ file,title,field_description,field_rights
 
 You can add your own custom fields as well, as long as the column headers match the machine name of the node fields. It important that the fields already exist on the Islandora Repository Item content type before attempting to ingest the nodes. If the column heading don't match the machine name of an existing field, Drupal with respond with a `500` HTTP error and will not ingest the node.
 
-Currently, only fields that of type "Text" can be added. Support for Entity Reference and other field types is under development.
+> Currently, only fields that of type "Text" can be added. Support for Entity Reference and other field types is coming soon.
 
 
 ## Maintainer
