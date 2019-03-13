@@ -15,6 +15,7 @@ $drupal_filesystem = 'fedora://';
 // Term ID from the Islandora Models taxonomy.
 $model = '23';
 
+
 // You do not need to adjust anything below this line.
 
 require 'vendor/autoload.php';
@@ -42,7 +43,6 @@ foreach ($records as $record) {
     $node = array(
         'type' => array(array('target_id' => 'islandora_object', 'target_type' => 'node_type')),
         'title' => array(array('value' => $record['title'])),
-        // 'field_description' => array(array('value' => $record['field_description'])),
         // Term ID from the Islandora Models taxonomy.
         'field_model' => array(array('target_id' => $model, 'target_type' => 'taxonomy_term')),
     );
@@ -76,7 +76,7 @@ foreach ($records as $record) {
             $pathinfo = pathinfo($file_path);
             $mimetype = $mimes->getMimeType($pathinfo['extension']);
             switch ($mimetype) {
-                // TIFFs and JP2s are file.
+                // TIFFs and JP2s are 'file'.
                 case "image/jpeg":
                 case "image/png":
                 case "image/gif":
