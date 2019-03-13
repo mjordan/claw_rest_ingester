@@ -8,6 +8,8 @@ Script to ingest a batch of nodes and accompanying media (images, audio, video, 
 1. `cd claw_rest_ingester`
 1. `php composer.phar install` (or equivalent on your system, e.g., `./composer install`)
 
+Note that you do not need to install this tool on your Islandora server. It can be used from any location that has network access to your server.
+
 ## Usage
 
 You may need to adjust the following variables at the top of `ingest.php`:
