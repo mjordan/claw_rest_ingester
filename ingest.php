@@ -36,7 +36,6 @@ else {
 }
 
 $client = new GuzzleClient(array('http_errors' => false));
-$authen_string = base64_encode($username . ':' . $password);
 
 foreach ($records as $record) {
     // Create the node.
@@ -99,7 +98,8 @@ foreach ($records as $record) {
             $image_file_contents = fopen($file_path, 'r');
             $endpoint = $node_uri[0] . $endpoint_path;
             $binary_response = $client->request('PUT', $endpoint, ['auth' => [$username, $password], 'headers' => $headers, 'body' => $image_file_contents]);
-            if ($binary_response->getStatusCode() == 201) {
+            $allowed_binary_response_codes = array(201, 204);
+            if (in_array($binary_response->getStatusCode(), $allowed_binary_response_codes)) {
                 print " Binary resource (" . $mimetype . ") from file " . $file_path . " added to " . $node_uri[0] . ".\n";
             }
             else {
