@@ -8,12 +8,12 @@ $password = 'islandora';
 $input_dir = 'input_data';
 $csv_file = $input_dir . '/metadata.csv';
 // The term ID from Media Use taxonomy that you want to assign to media.
-$media_use_tid = 15;
+$media_use_tid = 16;
 // The Drupal filesystem where you want the files to be saved.
 // $drupal_filesystem = 'public://';
 $drupal_filesystem = 'fedora://';
 // Term ID from the Islandora Models taxonomy.
-$model = '23';
+$model = 24;
 
 
 // You do not need to adjust anything below this line.
