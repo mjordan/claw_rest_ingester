@@ -1,5 +1,7 @@
 # Islandora CLAW REST Ingester
 
+> Note: As of July 2019, this tool has been replaced with [Islandora Workbench](https://github.com/mjordan/islandora_workbench).
+
 Script to ingest a batch of nodes and accompanying media (images, audio, video, and binary files) using Islandora CLAW's REST interface.
 
 ## Installation
